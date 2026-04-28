@@ -14,23 +14,26 @@ export const metadata: Metadata = {
   },
 }
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
       <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
       </head>
-      <body className='bg-black text-white'>
-        <div className='flex grid grid-cols-13 gap-4'>
+      <body className='text-white min-h-screen'>
+        <div className='grid grid-cols-[260px_1fr] min-h-screen'>
           <Sidenav />
-          <div>
+          <div className='flex flex-col'>
             <Navbar />
-            <main>
+            <main className='flex-1 p-2'>
               {children}
             </main>
           </div>
         </div>
-        {/* <Footer /> */}
       </body>
     </html>
   )

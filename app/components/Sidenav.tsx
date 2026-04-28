@@ -5,26 +5,20 @@ import React from 'react'
 
 const Sidenav = () => {
     return (
-        <div className='border border-gray-900 h-screen col-span-2 bg-gray-950'>
+        <div className='border-r border-gray-800/50 h-screen backdrop-blur-sm shadow-4xl '>
             <div className='border border-b border-gray-900 p-5'>
-                <h1 className='text-xl font-bold font-mono'>Dev_Caroline</h1>
+                <h1 className='text-xl font-bold font-serif'>Dev_Caroline</h1>
             </div>
-            <div className='mt-3'>
-                <Image
-                    src="/profile.jpeg"
-                    alt="profile"
-                    width={150}
-                    height={20}
-                    className="rounded-4xl object-cover mx-auto"
-                />
-                <h1 className='font-bold text-center text-xl mt-2'>Ajiboye Caroline Adetomiwa</h1>
+            <div className='mt-3 font-serif'>
+                <Image src="/profile.jpeg" alt="profile" width={150} height={20} className="rounded-4xl object-cover mx-auto"/>
+                <h1 className='font-bold text-center text-xl mt-2'>Ajiboye <span className='text-red-600'>Caroline</span> Adetomiwa</h1>
                 <p className='text-center text-gray-500'>Software Engineer | Full stack web developer </p>
                 <div className='mt-7'>
-                    <div className='p-3 border-b border-gray-800 mt-2 rounded-2xl'>Home</div>
-                    <div className='p-3 border-b border-gray-800 mt-2 rounded-2xl'>About</div>
-                    <div className='p-3 border-b border-gray-800 mt-2 rounded-2xl'>Projects</div>
-                    <div className='p-3 border-b border-gray-800 mt-2 rounded-2xl'>Blogs</div>
-                    <div className='p-3 border-b border-gray-800 mt-2 rounded-2xl'>Certifications</div>
+                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Home</div>
+                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>About</div>
+                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Projects</div>
+                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Blogs</div>
+                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Certifications</div>
                 </div>
                 <div className='border border-gray-900 mt-10 h-35 rounded-2xl pt-5 p-3'>
                     <div className='flex gap-2'>
@@ -34,16 +28,16 @@ const Sidenav = () => {
 
                     <div className='flex gap-2 mt-3'>
                         <p className='font-mono text-gray-400'>Uptime - </p>
-                        <p className='font-serif text-green-600 underline'>2 hours</p>
+                        <p className='font-serif text-red-700 underline'>2 hours</p>
                     </div>
 
                     <div className='flex gap-2 mt-3 '>
                         <p className='font-mono text-gray-400'>API Status - </p>
-                        <p className='font-serif text-green-600 underline'>All Active</p>
+                        <p className='font-serif text-red-700 underline'>Not Active</p>
                     </div>
                 </div>
 
-                <div className='flex justify-between px-14 mt-15'>
+                <div className='flex justify-between px-14 mt-10'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-github" viewBox="0 0 16 16">
                         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
                     </svg>
