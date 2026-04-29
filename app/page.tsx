@@ -7,11 +7,11 @@ const page = () => {
       {/* <div className='h-45 border border-gray-900 bg-gray-950 w-405 flex justify-between p-4'> */}
       <div className='border border-gray-800/50 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-6'>
         <div>
-          <h1 className='text-2xl font-serif'>Hello, I'm <span className='text-red-500'>Dev_Caroline</span> 🖐️</h1>
+          <h1 className='text-2xl font-serif'>Hello, I'm <span className='text-red-500 shadow-2xl'>Dev_Caroline</span> 🖐️</h1>
           <p className='mt-2 text-gray-400'>I focus on building products and systems that go beyond static websites <br />
             —solutions that improve processes, enhance user experience, and create measurable value.</p>
           <div className='flex gap-2 mt-4'>
-            <div className='border-x border-red-600 backdrop-blur-sm flex ps-2 gap-2  bg-black/30 p-1'>
+            <div className='border-e pe-4 border-red-600 backdrop-blur-sm flex ps-2 gap-2  bg-black/30 p-1'>
             <p className='font-serif text-red-600 mt-1'>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill" viewBox="0 0 16 16">
                 <circle cx="8" cy="8" r="8" />
@@ -23,25 +23,8 @@ const page = () => {
           </div>
 
         </div>
-        {/* <div>
-          My Tech Satck
-          <div>
-            <i className="devicon-nextjs-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-nodejs-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-postgresql-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-react-original colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-typescript-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-mongodb-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-git-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-prisma-original" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-tailwindcss-plain colored" style={{ fontSize: '32px' }}></i>
-            <i className="devicon-express-original" style={{ fontSize: '32px' }}></i>
-          </div>
-        </div> */}
-
-
         <div className='flex flex-col gap-4'>
-  <h2 className='font-mono text-xl tracking-widest text-red-500/70 uppercase'>// Tech Stack</h2>
+  <h2 className='font-mono text-xl tracking-widest text-red-500 shadow-2xl uppercase'>// Tech Stack</h2>
   <div className='flex justify-between'>
   {/* Frontend */}
   <div>
@@ -133,9 +116,19 @@ const page = () => {
       ))}
     </div>
   </div>
-  </div>
-</div>
-      </div>
+  </div> 
+</div> 
+    </div> 
+    <div className='h-70 border border-white shadow-2xl mt-4'>
+      Live Metrics
+    </div>
+    <div className='grid grid-cols-12 gap-5 h-80 mt-4'>
+      <div className='border border-white col-span-7'>Recent Projects</div>
+      <div className='border border-white col-span-5'>Activity logs</div>
+    </div>
+    <div className='mt-3 text-end'>
+      <p className='text-gray-600 font-mono text-sm'>&copy; 2026 DEV_CAROLINE</p>
+    </div>
     </div>
   )
 }

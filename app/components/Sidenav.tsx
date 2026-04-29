@@ -11,7 +11,7 @@ const Sidenav = () => {
             </div>
             <div className='mt-3 font-serif'>
                 <Image src="/profile.jpeg" alt="profile" width={150} height={20} className="rounded-4xl object-cover mx-auto"/>
-                <h1 className='font-bold text-center text-xl mt-2'>Ajiboye <span className='text-red-600'>Caroline</span> Adetomiwa</h1>
+                <h1 className='font-bold text-center text-xl mt-2'>Ajiboye <span className='text-red-500 shadow-2xl'>Caroline</span> Adetomiwa</h1>
                 <p className='text-center text-gray-500'>Software Engineer | Full stack web developer </p>
                 <div className='mt-7'>
                     <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Home</div>
