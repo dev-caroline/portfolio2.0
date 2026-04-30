@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
 
-
-
 const Sidenav = () => {
     return (
         <div className='border-r border-gray-800/50 h-screen backdrop-blur-sm shadow-4xl '>
@@ -22,18 +20,18 @@ const Sidenav = () => {
                 </div>
                 <div className='border border-gray-900 mt-10 h-35 rounded-2xl pt-5 p-3'>
                     <div className='flex gap-2'>
+                        <p className='font-mono text-gray-400'>Authentication - </p>
+                        <p className='font-serif text-green-600 underline'>Verified</p>
+                    </div>
+
+                    <div className='flex gap-2 mt-3 '>
                         <p className='font-mono text-gray-400'>System Status - </p>
-                        <p className='font-serif text-green-600 underline'>Online</p>
+                        <p className='font-serif text-red-700 underline'>Online</p>
                     </div>
 
                     <div className='flex gap-2 mt-3'>
                         <p className='font-mono text-gray-400'>Uptime - </p>
                         <p className='font-serif text-red-700 underline'>2 hours</p>
-                    </div>
-
-                    <div className='flex gap-2 mt-3 '>
-                        <p className='font-mono text-gray-400'>API Status - </p>
-                        <p className='font-serif text-red-700 underline'>Not Active</p>
                     </div>
                 </div>
 
