@@ -25,11 +25,13 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 50%,
     transparent 100%
   );
 
-  animation: shineSwipe 2s linear infinite;
+  animation: shineSwipe 3s linear infinite;
+  animation-delay: var(--animation-delay, 0s);
+  will-change: transform;
 }
 
 @keyframes shineSwipe {
@@ -38,11 +40,22 @@ body {
   100% { left: 110%; opacity: 0; }
 }
 
-.menu-item:nth-child(1)::after { animation-delay: 0s; }
-.menu-item:nth-child(2)::after { animation-delay: 0.3s; }
-.menu-item:nth-child(3)::after { animation-delay: 0.6s; }
-.menu-item:nth-child(4)::after { animation-delay: 0.9s; }
-.menu-item:nth-child(5)::after { animation-delay: 1.2s; }
+/* Active menu item glow effect */
+.menu-item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  pointer-events: none;
+}
 
 
 .no-scrollbar::-webkit-scrollbar {

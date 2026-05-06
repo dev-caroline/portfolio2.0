@@ -1,5 +1,36 @@
 'use client'
 import React from 'react'
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+
+function Card({ value, title, sub, icon, trend }: { value: string | number; title: string; sub: string; icon?: string; trend?: number }) {
+  return (
+    <div className='group relative border border-red-500/20 rounded-lg p-4 bg-black  hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 overflow-hidden'>
+      {/* Animated background glow */}
+      <div className='absolute inset-0 bg-linear-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-300' />
+      
+      <div className='relative z-10'>
+        <div className='flex items-start justify-between'>
+          <div>
+            <p className='text-xs text-gray-500 mb-2 tracking-widest'>{icon}</p>
+            <h1 className='text-3xl font-bold text-red-400 mb-1'>{value}</h1>
+            {trend !== undefined && (
+              <p className={`text-xs font-mono ${trend > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {trend > 0 ? '↗' : '↘'} {Math.abs(trend)}% today
+              </p>
+            )}
+          </div>
+          <div className='h-8 w-8 rounded-full bg-red-500/10 flex items-center justify-center animate-pulse'>
+            <div className='h-2 w-2 rounded-full bg-red-400' />
+          </div>
+        </div>
+        <p className='text-sm text-gray-300 mt-3 font-medium'>{title}</p>
+        <p className='text-xs text-gray-500 mt-1'>{sub}</p>
+      </div>
+    </div>
+  )
+}
+
 
 const projects = [
   {
@@ -59,13 +90,47 @@ const logs = [
   },
 ]
 
-const page = () => {
+export default function LiveMetrics() {
+  const [stats, setStats] = useState({
+    projects: 8,
+    systems: 2,
+    builds: 47,
+    streak: 14,
+    commits: 156,
+    uptime: 99.8,
+  })
+
+  const [trends, setTrends] = useState({
+    builds: 12,
+    commits: 8,
+    uptime: 2,
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        ...prev,
+        builds: prev.builds + Math.floor(Math.random() * 3),
+        commits: prev.commits + Math.floor(Math.random() * 2),
+        uptime: Math.min(100, prev.uptime + (Math.random() * 0.2)),
+      }))
+      
+      setTrends(prev => ({
+        ...prev,
+        builds: Math.max(0, prev.builds + (Math.random() - 0.5) * 4),
+        commits: Math.max(0, prev.commits + (Math.random() - 0.5) * 3),
+      }))
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div>
       {/* <div className='h-45 border border-gray-900 bg-gray-950 w-405 flex justify-between p-4'> */}
-      <div className='border border-gray-800/50 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-6'>
+      <div className='border  border-red-500/20 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-6'>
         <div>
-          <h1 className='text-2xl font-serif'>Hello, I'm <span className='text-red-500 shadow-2xl'>Dev_Caroline</span> 🖐️</h1>
+          <h1 className='text-2xl font-serif'>Hello, I&apos;m <span className='text-red-500 shadow-2xl'>Dev_Caroline</span> 🖐️</h1>
           <p className='mt-2 text-gray-400'>I focus on building products and systems that go beyond static websites <br />
             —solutions that improve processes, enhance user experience, and create measurable value.</p>
           <div className='flex gap-2 mt-4'>
@@ -82,7 +147,7 @@ const page = () => {
 
         </div>
         <div className='flex flex-col gap-4'>
-          <h2 className='font-mono text-xl tracking-widest text-red-500 shadow-2xl uppercase'>// Tech Stack</h2>
+          <h2 className='font-mono text-xl tracking-widest text-red-500 shadow-2xl uppercase'>{"// Tech Stack"}</h2>
           <div className='flex justify-between'>
             {/* Frontend */}
             <div>
@@ -177,18 +242,73 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className='h-70 border border-white shadow-2xl mt-4'>
+      {/* <div className='h-70 border border-red-500/20 p-2 shadow-2xl rounded-xl mt-4'>
         Live Metrics
-      </div>
-      
-      {/* <div className='grid grid-cols-12 gap-5 mt-4' style={{ height: '35vh' }}>
-        <div className='className="h-[calc(100%-48px)] overflow-y-auto no-scrollbar px-2"'>
-          <div className='border col-span-7 overflow-y-auto scroll-'>
-            <h1 className='p-2 text-xl'>Recent Projects</h1>
-          </div>
-        </div>
-        <div className='border border-white col-span-5'>Activity logs</div>
       </div> */}
+
+          <div className='h-auto border border-red-500/20 p-6 shadow-2xl rounded-xl mt-4  backdrop-blur-md'>
+      
+      <div className='flex items-center justify-between mb-6'>
+        <div>
+          <h2 className='text-xl font-bold text-white'>Developer Activity System</h2>
+          <p className='text-xs text-gray-500 mt-1'>Real-time metrics & performance tracking</p>
+        </div>
+        <div className='flex items-center gap-2'>
+          <div className='w-2 h-2 bg-green-400 rounded-full animate-pulse' />
+          <span className='text-xs text-green-400 font-mono'>ACTIVE</span>
+        </div>
+      </div>
+
+      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3'>
+        
+        {/* Projects */}
+        <Card
+          value={stats.projects}
+          title="Projects"
+          sub="Shipped"
+        />
+
+        {/* Active Systems */}
+        <Card
+          value={stats.systems}
+          title="Systems"
+          sub="Running"
+        />
+
+        {/* Total Builds */}
+        <Card
+          value={stats.builds}
+          title="Builds"
+          sub="Iterations"
+          trend={Math.round(trends.builds)}
+        />
+
+        {/* Build Streak */}
+        <Card
+          value={stats.streak}
+          title="Streak"
+          sub="Days Active"
+        />
+
+        {/* Commits */}
+        <Card
+          value={stats.commits}
+          title="Commits"
+          sub="Pushed"
+          trend={Math.round(trends.commits)}
+        />
+
+        {/* Uptime */}
+        <Card
+          value={`${stats.uptime.toFixed(1)}%`}
+          title="Uptime"
+          sub="Systems"
+          trend={Math.round(trends.uptime)}
+        />
+      </div>
+
+ 
+    </div>
 
       <div className="grid grid-cols-12 gap-5 mt-4" style={{ height: "35vh" }}>
   
@@ -211,9 +331,11 @@ const page = () => {
           >
             {/* Image */}
             <div className="w-32 h-24 rounded-md overflow-hidden border border-red-500/20">
-              <img
+              <Image
                 src={project.image}
                 alt={project.title}
+                width={128}
+                height={96}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -270,11 +392,11 @@ const page = () => {
 
     {/* Top shadow */}
     {/* <div className="pointer-events-none absolute top-0 left-0 w-full h-12 
-      bg-gradient-to-b from-black via-black/80 to-transparent" /> */}
+      bg-linear-to-b from-black via-black/80 to-transparent" /> */}
 
     {/* Bottom shadow */}
     <div className="pointer-events-none absolute bottom-0 left-0 w-full h-12 
-      bg-gradient-to-t from-black via-black/80 to-transparent" />
+      bg-linear-to-t from-black via-black/80 to-transparent" />
     
   </div>
 
@@ -326,8 +448,8 @@ const page = () => {
   </div>
 
   {/* Shadow fade */}
-  <div className="pointer-events-none absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-black to-transparent" />
-  <div className="pointer-events-none absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black to-transparent" />
+  <div className="pointer-events-none absolute top-0 left-0 w-full h-10 bg-linear-to-b from-black to-transparent" />
+  <div className="pointer-events-none absolute bottom-0 left-0 w-full h-10 bg-linear-to-t from-black to-transparent" />
 
 </div>
 
@@ -338,5 +460,3 @@ const page = () => {
     </div>
   )
 }
-
-export default page

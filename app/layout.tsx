@@ -1,21 +1,26 @@
+'use client'
 import React from 'react'
 import "./globals.css";
 import { Metadata } from 'next'
 import Sidenav from './components/Sidenav';
 import Navbar from './components/Navbar';
+import { usePathname } from 'next/navigation';
 // import Footer from './components/Footer';
 
-export const metadata: Metadata = {
-  title: 'Ajiboye Caroline Adetomiwa | Full-Stack Web Developer | MERN STACK',
-  description: 'Ajiboye Caroline Adetomiwa - Full-Stack Developer | Building modern, scalable, and user-focused web applications.',
-  viewport: 'width=device-width, initial-scale=1',
-  icons: {
-    icon: '/favicon.ico',
-  },
-}
+// export const metadata: Metadata = {
+//   title: 'Ajiboye Caroline Adetomiwa | Full-Stack Web Developer | MERN STACK',
+//   description: 'Ajiboye Caroline Adetomiwa - Full-Stack Developer | Building modern, scalable, and user-focused web applications.',
+//   viewport: 'width=device-width, initial-scale=1',
+//   icons: {
+//     icon: '/favicon.ico',
+//   },
+// }
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isAuthPage = pathname === '/signup' || pathname === '/otp'
+
   return (
     <html lang='en'>
       <head>
@@ -25,15 +30,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
       </head>
       <body className='text-white min-h-screen'>
-        <div className='grid grid-cols-[260px_1fr] min-h-screen'>
-          <Sidenav />
-          <div className='flex flex-col'>
-            <Navbar />
-            <main className='flex-1 p-2'>
-              {children}
-            </main>
+        {isAuthPage ? (
+          <div className='min-h-screen bg-black'>
+            {children}
           </div>
-        </div>
+        ) : (
+          <div className='grid grid-cols-[260px_1fr] min-h-screen'>
+            <Sidenav />
+            <div className='flex flex-col'>
+              <Navbar />
+              <main className='flex-1 p-2'>
+                {children}
+              </main>
+            </div>
+          </div>
+        )}
       </body>
     </html>
   )

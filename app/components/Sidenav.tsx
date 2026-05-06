@@ -1,10 +1,30 @@
+'use client'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
+
 const Sidenav = () => {
+    const pathname = usePathname()
+
+    const menuItems = [
+        { href: '/', label: 'Home', delay: '0s' },
+        { href: '/about', label: 'About', delay: '0.15s' },
+        { href: '/projects', label: 'Projects', delay: '0.3s' },
+        { href: '/blogs', label: 'Blogs', delay: '0.45s' },
+        { href: '/certifications', label: 'Certifications', delay: '0.6s' },
+    ]
+
+    const isActive = (href: string) => {
+        if (href === '/') {
+            return pathname === '/'
+        }
+        return pathname.startsWith(href)
+    }
     return (
-        <div className='border-r border-gray-800/50 h-screen backdrop-blur-sm shadow-4xl '>
-            <div className='border border-b border-gray-900 p-5'>
+        <div className='border-r  border-red-500/20 h-screen backdrop-blur-sm shadow-4xl '>
+            <div className='border border-b  border-red-500/20 p-5'>
                 <h1 className='text-xl font-bold font-serif'>Dev_Caroline</h1>
             </div>
             <div className='mt-3 font-serif'>
@@ -12,13 +32,22 @@ const Sidenav = () => {
                 <h1 className='font-bold text-center text-xl mt-2'>Ajiboye <span className='text-red-500 shadow-2xl'>Caroline</span> Adetomiwa</h1>
                 <p className='text-center text-gray-500'>Software Engineer | Full stack web developer </p>
                 <div className='mt-7'>
-                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Home</div>
-                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>About</div>
-                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Projects</div>
-                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Blogs</div>
-                    <div className='p-3 border-b border-red-900 mt-2 rounded-2xl menu-item'>Certifications</div>
+                    {menuItems.map((item) => (
+                        <Link key={item.href} href={item.href} prefetch={true}>
+                            <div 
+                                className={`p-3 border-b mt-2 rounded-2xl menu-item transition-all duration-300 ${
+                                    isActive(item.href)
+                                        ? 'border-red-500 shadow-lg shadow-red-500/30 text-white font-semibold'
+                                        : 'border-red-900 text-gray-300 hover:bg-red-500/5'
+                                }`}
+                                style={{ '--animation-delay': item.delay } as React.CSSProperties}
+                            >
+                                {item.label}
+                            </div>
+                        </Link>
+                    ))}
                 </div>
-                <div className='border border-gray-900 mt-10 h-35 rounded-2xl pt-5 p-3'>
+                <div className='border border-red-500/20 mt-10 h-35 rounded-2xl pt-5 p-3'>
                     <div className='flex gap-2'>
                         <p className='font-mono text-gray-400'>Authentication - </p>
                         <p className='font-serif text-green-600 underline'>Verified</p>
