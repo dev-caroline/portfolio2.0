@@ -1,47 +1,55 @@
 'use client'
 import React from 'react'
-import "./globals.css";
-import { Metadata } from 'next'
-import Sidenav from './components/Sidenav';
-import Navbar from './components/Navbar';
-import { usePathname } from 'next/navigation';
-// import Footer from './components/Footer';
+import './globals.css'
+import Sidenav from './components/Sidenav'
+import Navbar from './components/Navbar'
+import { usePathname } from 'next/navigation'
+import Footer from './components/Footer'
 
-// export const metadata: Metadata = {
-//   title: 'Ajiboye Caroline Adetomiwa | Full-Stack Web Developer | MERN STACK',
-//   description: 'Ajiboye Caroline Adetomiwa - Full-Stack Developer | Building modern, scalable, and user-focused web applications.',
-//   viewport: 'width=device-width, initial-scale=1',
-//   icons: {
-//     icon: '/favicon.ico',
-//   },
-// }
-
+// Pages that don't use the main layout (authentication pages)
+const AUTH_PAGES = ['/signup', '/otp']
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAuthPage = pathname === '/signup' || pathname === '/otp'
+  const isAuthPage = AUTH_PAGES.includes(pathname)
 
   return (
     <html lang='en'>
       <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
+        {/* Icon and Font Libraries */}
+        <link
+          href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css'
+          rel='stylesheet'
+        />
+        <link
+          rel='stylesheet'
+          href='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css'
+        />
+        <link
+          rel='stylesheet'
+          href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
+        />
       </head>
       <body className='text-white min-h-screen'>
         {isAuthPage ? (
-          <div className='min-h-screen bg-black'>
-            {children}
-          </div>
+          /* Auth pages - full screen without navigation */
+          <div className='min-h-screen bg-black'>{children}</div>
         ) : (
+          /* Main pages - with sidebar, navbar, and footer */
           <div className='grid grid-cols-[260px_1fr] min-h-screen'>
+            {/* Sidebar Navigation */}
             <Sidenav />
+
+            {/* Main Content Area */}
             <div className='flex flex-col'>
+              {/* Top Navigation Bar */}
               <Navbar />
-              <main className='flex-1 p-2'>
-                {children}
-              </main>
+
+              {/* Page Content */}
+              <main className='flex-1 p-2'>{children}</main>
+
+              {/* Footer */}
+              <Footer />
             </div>
           </div>
         )}
