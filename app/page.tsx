@@ -2,6 +2,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { TECH_STACK, PROJECTS, LOGS } from './home/constants'
 
 function Card({ value, title, sub, icon, trend }: { value: string | number; title: string; sub: string; icon?: string; trend?: number }) {
@@ -34,6 +35,7 @@ function Card({ value, title, sub, icon, trend }: { value: string | number; titl
 
 
 export default function LiveMetrics() {
+  const pathname = usePathname()
   const [stats, setStats] = useState({
     projects: 8,
     systems: 2,
@@ -48,6 +50,62 @@ export default function LiveMetrics() {
     commits: 8,
     uptime: 2,
   })
+
+  const [logs, setLogs] = useState(LOGS)
+  const [pageViews, setPageViews] = useState(0)
+
+  useEffect(() => {
+    const trackPageView = async () => {
+      try {
+        const sessionId = localStorage.getItem('sessionId') || Math.random().toString(36)
+        localStorage.setItem('sessionId', sessionId)
+        
+        await fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: pathname, sessionId }),
+        })
+      } catch (error) {
+        console.error('Failed to track page view:', error)
+      }
+    }
+
+    trackPageView()
+  }, [pathname])
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch('/api/analytics')
+        const data = await response.json()
+        setPageViews(data.today || 0)
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      }
+    }
+
+    fetchAnalytics()
+    const analyticsInterval = setInterval(fetchAnalytics, 60000)
+
+    return () => clearInterval(analyticsInterval)
+  }, [])
+
+  useEffect(() => {
+    const fetchGitHubActivity = async () => {
+      try {
+        const response = await fetch('/api/github-activity')
+        const data = await response.json()
+        setLogs(data)
+      } catch (error) {
+        console.error('Failed to fetch GitHub activity:', error)
+      }
+    }
+
+    fetchGitHubActivity()
+    const gitHubInterval = setInterval(fetchGitHubActivity, 300000)
+
+    return () => clearInterval(gitHubInterval)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,8 +127,8 @@ export default function LiveMetrics() {
   }, [])
 
   return (
-    <div>
-      <div className='border border-red-500/20 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-4'>
+    <div className='lg:h-full lg:flex lg:flex-col lg:overflow-hidden'>
+      <div className='border border-red-500/20 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-4 lg:shrink-0'>
         <div>
           <h1 className='text-2xl font-serif'>Hello, I&apos;m <span className='text-red-500 shadow-2xl'>Dev_Caroline</span> 🖐️</h1>
           <p className='mt-2 text-gray-400'>I focus on building products and systems that go beyond static websites <br />
@@ -113,7 +171,7 @@ export default function LiveMetrics() {
           </div>
         </div>
       </div>
-      <div className='h-auto border border-red-500/20 p-6 shadow-2xl rounded-xl mt-4 backdrop-blur-md'>
+      <div className='h-auto border border-red-500/20 p-6 shadow-2xl rounded-xl mt-4 backdrop-blur-md lg:shrink-0'>
         <div className='flex items-center justify-between mb-6'>
           <div>
             <h2 className='text-xl font-bold text-white'>Developer Activity System</h2>
@@ -128,14 +186,14 @@ export default function LiveMetrics() {
           <Card value={stats.projects} title="Projects" sub="Shipped" />
           <Card value={stats.systems} title="Systems" sub="Running" />
           <Card value={stats.builds} title="Builds" sub="Iterations" trend={Math.round(trends.builds)} />
-          <Card value={stats.streak} title="Streak" sub="Days Active" />
+          <Card value={pageViews} title="Page Views" sub="Today" />
           <Card value={stats.commits} title="Commits" sub="Pushed" trend={Math.round(trends.commits)} />
           <Card value={`${stats.uptime.toFixed(1)}%`} title="Uptime" sub="Systems" trend={Math.round(trends.uptime)} />
         </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-5 mt-4" style={{ height: "35vh" }}>
-        <div className="col-span-7 relative border border-red-500/20 rounded-xl overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-4 lg:flex-1 lg:min-h-0 lg:grid-rows-1">
+        <div className="col-span-12 lg:col-span-7 relative border border-red-500/20 rounded-xl overflow-hidden lg:min-h-0">
           <h1 className="p-3 text-xl border-b border-red-500/10 bg-black/40">Recent Projects</h1>
           <div className="h-[calc(100%-56px)] overflow-y-auto no-scrollbar px-3 py-2 scroll-smooth">
             <div className="space-y-4">
@@ -170,17 +228,17 @@ export default function LiveMetrics() {
           </div>
           <div className="pointer-events-none absolute bottom-0 left-0 w-full h-12 bg-linear-to-t from-black via-black/80 to-transparent" />
         </div>
-        <div className="col-span-5 relative border border-red-500/10 rounded-xl overflow-hidden">
-          <h1 className="p-3 text-lg border-b border-red-500/10 bg-black/40">Activity Logs</h1>
+        <div className="col-span-5 relative border border-red-500/10 rounded-xl overflow-hidden lg:min-h-0">
+          <h1 className="p-3 text-lg border-b border-red-500/10 bg-black/40">GitHub Activity</h1>
           <div className="h-[calc(100%-48px)] overflow-y-auto no-scrollbar px-3 py-2 space-y-3">
-            {LOGS.map((log, i) => (
+            {logs.map((log, i) => (
               <div key={i} className="flex items-start gap-3 text-sm border-b border-red-500/10 pb-2">
-                <span className="w-2 h-2 mt-2 rounded-full bg-red-500 animate-pulse" />
+                <span className={`w-2 h-2 mt-2 rounded-full animate-pulse ${log.status === "SUCCESS" ? "bg-green-500" : "bg-yellow-500"}`} />
                 <div className="flex-1">
                   <p className="text-gray-300">{log.action}</p>
                   <span className="text-xs text-gray-500">{log.time}</span>
                 </div>
-                <span className={`text-[10px] px-2 py-1 rounded ${log.status === "SUCCESS" ? "bg-green-500/20 text-green-400" : log.status === "PERF" ? "bg-blue-500/20 text-blue-400" : log.status === "INIT" ? "bg-purple-500/20 text-purple-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                <span className={`text-[10px] px-2 py-1 rounded ${log.status === "SUCCESS" ? "bg-green-500/20 text-green-400" : log.status === "ERROR" ? "bg-red-500/20 text-red-400" : "bg-yellow-500/20 text-yellow-400"}`}>
                   {log.status}
                 </span>
               </div>

@@ -15,7 +15,7 @@ const MENU_ITEMS = [
 
 // Social icons component
 const SocialIcons = () => (
-  <div className='flex justify-between px-14 mt-10'>
+  <div className='flex justify-between px-14 mt-15'>
     {/* GitHub */}
     <a href='#' className='hover:opacity-70 transition-opacity'>
       <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' viewBox='0 0 16 16'>
@@ -93,11 +93,25 @@ const NavMenu = ({ pathname }: { pathname: string }) => {
   )
 }
 
-const Sidenav = () => {
+const Sidenav = ({ isOpen, toggle }: { isOpen: boolean; toggle: () => void }) => {
   const pathname = usePathname()
 
   return (
-    <div className='border-r border-red-500/20 h-screen backdrop-blur-sm shadow-4xl'>
+    <>
+      {/* Overlay for mobile */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={toggle}
+      />
+
+      {/* Sidenav */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-black border-r border-red-500/20 backdrop-blur-sm shadow-4xl z-40 transform transition-transform duration-300 lg:relative lg:w-auto lg:translate-x-0 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
       {/* Header */}
       <div className='border border-b border-red-500/20 p-5'>
         <h1 className='text-xl font-bold font-serif'>Dev_Caroline</h1>
@@ -111,6 +125,7 @@ const Sidenav = () => {
           alt='profile'
           width={150}
           height={150}
+          loading='eager'
           className='rounded-4xl object-cover mx-auto'
         />
 
@@ -130,6 +145,7 @@ const Sidenav = () => {
         <SocialIcons />
       </div>
     </div>
+  </>
   )
 }
 

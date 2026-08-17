@@ -1,18 +1,15 @@
-'use client'
-import React from 'react'
 import './globals.css'
-import Sidenav from './components/Sidenav'
-import Navbar from './components/Navbar'
-import { usePathname } from 'next/navigation'
-import Footer from './components/Footer'
+import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
+import AppShell from './components/AppShell'
 
-// Pages that don't use the main layout (authentication pages)
-const AUTH_PAGES = ['/signup', '/otp']
+export const metadata: Metadata = {
+  title: 'Dev_Caroline | Software Engineer & Full-Stack Developer',
+  description:
+    'Portfolio of Ajiboye Caroline Adetomiwa — building products and systems that improve processes, enhance user experience, and create measurable value.',
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const isAuthPage = AUTH_PAGES.includes(pathname)
-
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en'>
       <head>
@@ -30,29 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
         />
       </head>
-      <body className='text-white min-h-screen'>
-        {isAuthPage ? (
-          /* Auth pages - full screen without navigation */
-          <div className='min-h-screen bg-black'>{children}</div>
-        ) : (
-          /* Main pages - with sidebar, navbar, and footer */
-          <div className='grid grid-cols-[260px_1fr] min-h-screen'>
-            {/* Sidebar Navigation */}
-            <Sidenav />
-
-            {/* Main Content Area */}
-            <div className='flex flex-col'>
-              {/* Top Navigation Bar */}
-              <Navbar />
-
-              {/* Page Content */}
-              <main className='flex-1 p-2'>{children}</main>
-
-              {/* Footer */}
-              <Footer />
-            </div>
-          </div>
-        )}
+      <body className='text-white min-h-screen bg-black'>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   )

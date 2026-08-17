@@ -1,11 +1,28 @@
 import React from 'react'
 
-const Navbar = () => {
+const Navbar = ({ toggleSidenav }: { toggleSidenav: () => void }) => {
   return (
-    <div className='border-b border-red-500/20 p-5 flex justify-between bg-black/20 backdrop-blur-sm'>
-      {/* Logo/Title */}
-      <div className='font-serif text-xl'>
-        `//* Welcome to the world of systems 💡
+    <div className='flex justify-between items-center p-5 bg-black/20 backdrop-blur-sm border-b border-red-500/20 sticky top-0 z-20'>
+      {/* Mobile Menu (visible on small screens) */}
+      <button className='lg:hidden' onClick={toggleSidenav}>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='25'
+          height='25'
+          fill='white'
+          className='bi bi-list'
+          viewBox='0 0 16 16'
+        >
+          <path
+            fillRule='evenodd'
+            d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5'
+          />
+        </svg>
+      </button>
+
+      {/* Logo/Title (hidden on small screens) */}
+      <div className='hidden lg:block font-serif text-xl'>
+        //* Welcome to the world of systems 💡
       </div>
 
       {/* Profile Button */}

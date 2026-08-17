@@ -50,7 +50,7 @@ export default function Page() {
       <div className="w-full px-10 py-5 overflow-hidden">
 
         {/* Hero */}
-        <div className="grid grid-cols-[1fr_200px] gap-2 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
           {/* Left */}
           <div>

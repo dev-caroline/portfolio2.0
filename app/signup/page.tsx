@@ -6,10 +6,13 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [positions] = useState(() => 
-    [...Array(5)].map(() => ({
-      top: Math.random() * 100,
-      left: Math.random() * 100,
-    }))
+    [
+      { top: 12, left: 18 },
+      { top: 68, left: 8 },
+      { top: 34, left: 82 },
+      { top: 82, left: 62 },
+      { top: 50, left: 44 },
+    ]
   )
 
   const validateEmail = (email: string) => {

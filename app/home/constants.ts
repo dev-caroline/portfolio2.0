@@ -21,24 +21,24 @@ export const TECH_STACK = {
 
 export const PROJECTS = [
   {
-    title: "Articles Studio",
-    desc: "Content management system for structured publishing.",
-    image: "/images/project1.png",
-    tech: ["Next.js", "Prisma", "PostgreSQL"],
+    title: "QR Based Attendance System",
+    desc: "QR based attendance system",
+    image: "/QR Based attendance system.png",
+    tech: ["MongoDB", "Express", "React", "Node.js"],
     status: "LIVE",
   },
   {
-    title: "System Dashboard",
-    desc: "Real-time monitoring interface for user activity.",
-    image: "/images/project2.png",
-    tech: ["React", "Tailwind", "Node.js"],
-    status: "DEV",
+    title: "Note Box",
+    desc: "Note box - A note keeping app",
+    image: "/Note keeping webapp.png",
+    tech: ["JavaScript", "Firebase"],
+    status: "LIVE",
   },
   {
-    title: "Portfolio Engine",
-    desc: "Dynamic portfolio with modular architecture.",
-    image: "/images/project3.png",
-    tech: ["Next.js", "TypeScript"],
+    title: "Medicdiet Clinic",
+    desc: "Medicdiet clinic - a dietetic consulatation website",
+    image: "/medicdiet clinic.png",
+    tech: ["MongoDB", "Express", "React", "Node.js"],
     status: "LIVE",
   },
 ];
