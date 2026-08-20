@@ -65,7 +65,7 @@ const SignupPage = () => {
                   <i className='bi bi-arrow-right-circle text-red-400 text-2xl' />
                 </div>
               </div>
-              <h1 className='text-4xl font-bold text-white mb-3 tracking-tight'>
+              <h1 className='text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight'>
                 Enter the <span className='bg-linear-to-r from-red-400 to-red-600 bg-clip-text text-transparent'>World of Systems</span>
               </h1>
             </div>

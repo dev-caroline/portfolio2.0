@@ -47,7 +47,7 @@ export default function Page() {
   return (
     <div className="w-full h-full flex flex-col text-[#d0d0d0] font-sans">
       {/* Body */}
-      <div className="w-full px-10 py-5 overflow-hidden">
+      <div className="w-full px-4 sm:px-6 lg:px-10 py-5 overflow-hidden">
 
         {/* Hero */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -59,7 +59,7 @@ export default function Page() {
               {'// identity.init()'}
             </div>
 
-            <h1 className="text-[36px] font-semibold leading-tight text-[#f0f0f0] mb-3">
+            <h1 className="text-3xl sm:text-[36px] font-semibold leading-tight text-[#f0f0f0] mb-3">
               Ajiboye Caroline
               <br />
               <span className="text-[#c0392b]">Adetomiwa</span>
@@ -123,13 +123,13 @@ export default function Page() {
         {/* Divider */}
         <div className="h-px bg-[#111] mb-4" />
 
-<div className='flex gap-6'>
+<div className='flex flex-col lg:flex-row gap-6'>
         {/* Experience */}
         <div className="">
           <p className="font-mono text-[11px] text-[#444] tracking-widest mb-6">{'// experience.log'}</p>
           <div className="flex flex-col gap-0">
             {experience.map((e, i) => (
-              <div key={i} className="grid grid-cols-[110px_1px_1fr] gap-x-4 relative">
+              <div key={i} className="grid grid-cols-[80px_1px_1fr] sm:grid-cols-[110px_1px_1fr] gap-x-4 relative">
                 {/* Time */}
                 <p className="font-mono text-[11px] text-[#555] text-right leading-relaxed pt-0.5 pb-7 whitespace-pre-line">
                   {e.period}
@@ -155,7 +155,7 @@ export default function Page() {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-[#111] mb-12" />
+        <div className="h-px w-full bg-[#111] mb-12 lg:h-auto lg:w-px lg:mb-0 lg:self-stretch" />
 
         {/* Education */}
         <div className="">

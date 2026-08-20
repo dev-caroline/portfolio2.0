@@ -15,7 +15,7 @@ const MENU_ITEMS = [
 
 // Social icons component
 const SocialIcons = () => (
-  <div className='flex justify-between px-14 mt-15'>
+  <div className='flex justify-between px-8 mt-15'>
     {/* GitHub */}
     <a href='#' className='hover:opacity-70 transition-opacity'>
       <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' viewBox='0 0 16 16'>
@@ -48,7 +48,7 @@ const SocialIcons = () => (
 
 // Status info component
 const StatusInfo = () => (
-  <div className='border border-red-500/20 mt-10 h-35 rounded-2xl pt-5 p-3'>
+  <div className='border border-red-500/20 mt-10 rounded-2xl pt-5 p-3'>
     <div className='flex gap-2'>
       <p className='font-mono text-gray-400'>Authentication -</p>
       <p className='font-serif text-green-600 underline'>Verified</p>
@@ -108,7 +108,7 @@ const Sidenav = ({ isOpen, toggle }: { isOpen: boolean; toggle: () => void }) =>
 
       {/* Sidenav */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-black border-r border-red-500/20 backdrop-blur-sm shadow-4xl z-40 transform transition-transform duration-300 lg:relative lg:w-auto lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 overflow-y-auto no-scrollbar bg-black border-r border-red-500/20 backdrop-blur-sm shadow-4xl z-40 transform transition-transform duration-300 lg:relative lg:w-64 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

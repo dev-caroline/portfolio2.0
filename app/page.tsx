@@ -128,11 +128,11 @@ export default function LiveMetrics() {
 
   return (
     <div className='lg:h-full lg:flex lg:flex-col lg:overflow-hidden'>
-      <div className='border border-red-500/20 bg-black/30 backdrop-blur-sm rounded-xl flex justify-between p-4 lg:shrink-0'>
+      <div className='border border-red-500/20 bg-black/30 backdrop-blur-sm rounded-xl flex flex-col gap-6 lg:flex-row lg:justify-between p-4 lg:shrink-0'>
         <div>
           <h1 className='text-2xl font-serif'>Hello, I&apos;m <span className='text-red-500 shadow-2xl'>Dev_Caroline</span> 🖐️</h1>
           <p className='mt-2 text-gray-400'>I focus on building products and systems that go beyond static websites <br />
-            —solutions that improve processes, enhance user experience, and create measurable value.</p>
+            solutions that improve processes, enhance user experience, and create measurable value.</p>
           <div className='flex gap-2 mt-4'>
             <div className='border-e pe-4 border-red-600 backdrop-blur-sm flex ps-2 gap-2 bg-black/30 p-1'>
               <p className='font-serif text-red-600 mt-1'>
@@ -147,7 +147,7 @@ export default function LiveMetrics() {
         </div>
         <div className='flex flex-col gap-4'>
           <h2 className='font-mono text-xl tracking-widest text-red-500 shadow-2xl uppercase'>{"// Tech Stack"}</h2>
-          <div className='flex justify-between gap-8'>
+          <div className='flex flex-wrap gap-x-8 gap-y-4 lg:justify-between'>
             {Object.entries(TECH_STACK).map(([category, techs]) => (
               <div key={category}>
                 <p className='font-mono text-[10px] text-gray-600 tracking-widest uppercase mb-2'>{category}</p>
@@ -198,8 +198,8 @@ export default function LiveMetrics() {
           <div className="h-[calc(100%-56px)] overflow-y-auto no-scrollbar px-3 py-2 scroll-smooth">
             <div className="space-y-4">
               {PROJECTS.map((project, index) => (
-                <div key={index} className="border border-red-500/20 bg-black/40 backdrop-blur-md rounded-xl p-4 flex gap-4 hover:border-red-500 transition-all">
-                  <div className="w-32 h-24 rounded-md overflow-hidden border border-red-500/20">
+                <div key={index} className="border border-red-500/20 bg-black/40 backdrop-blur-md rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-red-500 transition-all">
+                  <div className="w-full h-40 sm:w-32 sm:h-24 rounded-md overflow-hidden border border-red-500/20">
                     <Image src={project.image} alt={project.title} width={128} height={96} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 flex flex-col justify-between">
@@ -228,7 +228,7 @@ export default function LiveMetrics() {
           </div>
           <div className="pointer-events-none absolute bottom-0 left-0 w-full h-12 bg-linear-to-t from-black via-black/80 to-transparent" />
         </div>
-        <div className="col-span-5 relative border border-red-500/10 rounded-xl overflow-hidden lg:min-h-0">
+        <div className="col-span-12 lg:col-span-5 relative border border-red-500/10 rounded-xl overflow-hidden lg:min-h-0">
           <h1 className="p-3 text-lg border-b border-red-500/10 bg-black/40">GitHub Activity</h1>
           <div className="h-[calc(100%-48px)] overflow-y-auto no-scrollbar px-3 py-2 space-y-3">
             {logs.map((log, i) => (

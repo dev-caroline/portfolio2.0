@@ -104,7 +104,7 @@ const OtpPage = () => {
 
             <div className='group relative'>
               <div className='absolute -inset-0.5 bg-linear-to-r from-red-500/20 to-red-600/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-              <div className='relative border border-red-500/20 rounded-xl bg-black/40 backdrop-blur-xl p-8 shadow-2xl hover:border-red-500/40 transition-all duration-300'>
+              <div className='relative border border-red-500/20 rounded-xl bg-black/40 backdrop-blur-xl p-5 sm:p-8 shadow-2xl hover:border-red-500/40 transition-all duration-300'>
                 <div className='absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-1 bg-linear-to-r from-transparent via-red-500/50 to-transparent' />
 
                 <form onSubmit={handleVerifyOTP} className='space-y-6'>
@@ -113,7 +113,7 @@ const OtpPage = () => {
                     <p className='text-red-400 font-medium break-all text-sm'>{email}</p>
                   </div>
 
-                  <div className='flex gap-2 justify-center'>
+                  <div className='grid grid-cols-6 gap-1.5 sm:gap-2'>
                     {otp.map((digit, index) => (
                       <input
                         key={index}
@@ -126,7 +126,7 @@ const OtpPage = () => {
                         onChange={(e) => handleChange(index, e.target.value)}
                         onKeyDown={(e) => handleKeyDown(index, e)}
                         onPaste={handlePaste}
-                        className='w-12 h-14 bg-gray-950/50 border-2 border-gray-700/30 rounded-lg text-center text-white text-xl font-bold focus:outline-none focus:border-red-500/50 focus:ring-2 focus:ring-red-500/20 transition-all duration-300'
+                        className='w-full h-12 sm:h-14 bg-gray-950/50 border-2 border-gray-700/30 rounded-lg text-center text-white text-xl font-bold focus:outline-none focus:border-red-500/50 focus:ring-2 focus:ring-red-500/20 transition-all duration-300'
                         placeholder='0'
                         disabled={loading}
                       />

@@ -6,9 +6,9 @@ import { CERTIFICATIONS_LIST } from './constants'
 const Page = () => {
   return (
     <div className='w-full h-full flex flex-col'>
-      <div className='w-full flex flex-col px-8 py-6'>
+      <div className='w-full flex flex-col px-4 sm:px-8 py-6'>
         <div className='mb-5'>
-          <h1 className='text-3xl font-bold text-white mb-1 tracking-tight'>Certifications</h1>
+          <h1 className='text-2xl sm:text-3xl font-bold text-white mb-1 tracking-tight'>Certifications</h1>
           <p className='text-gray-400 text-xs'>Professional credentials and achievements</p>
         </div>
         <div className='overflow-hidden pr-2'>
