@@ -1,11 +1,16 @@
 'use client'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-const OtpPage = () => {
+const OtpForm = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const email = searchParams.get('email') ?? ''
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [loading, setLoading] = useState(false)
   const [verified, setVerified] = useState(false)
-  const email = 'user@example.com'
+  const [error, setError] = useState('')
+  const [info, setInfo] = useState('')
   const [positions] = useState(() =>
     [
       { top: 12, left: 18 },
@@ -17,8 +22,19 @@ const OtpPage = () => {
   )
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
+  // No email in the query string → send them back to signup.
+  useEffect(() => {
+    if (!email) router.replace('/signup')
+  }, [email, router])
+
+  const clearOtp = () => {
+    setOtp(['', '', '', '', '', ''])
+    inputRefs.current[0]?.focus()
+  }
+
   const handleChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return
+    if (error) setError('')
 
     const newOtp = [...otp]
     newOtp[index] = value.slice(-1)
@@ -51,18 +67,58 @@ const OtpPage = () => {
 
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+    setInfo('')
 
-    if (!isComplete) return
+    if (!isComplete || !email) return
 
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setVerified(true)
-    setLoading(false)
+    try {
+      const res = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: otpString }),
+      })
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setError(data.error || 'Incorrect code. Please try again.')
+        setLoading(false)
+        clearOtp()
+        return
+      }
+
+      // Verified: session cookie is now set. Land on the dashboard.
+      setVerified(true)
+      router.push('/')
+      router.refresh()
+    } catch {
+      setError('Network error. Please try again.')
+      setLoading(false)
+      clearOtp()
+    }
   }
 
-  const handleResendOTP = () => {
-    setOtp(['', '', '', '', '', ''])
-    inputRefs.current[0]?.focus()
+  const handleResendOTP = async () => {
+    if (!email) return
+    setError('')
+    setInfo('')
+    clearOtp()
+    try {
+      const res = await fetch('/api/auth/request-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error || 'Could not resend the code. Please try again.')
+        return
+      }
+      setInfo('A new code has been sent to your email.')
+    } catch {
+      setError('Network error. Please try again.')
+    }
   }
 
   return (
@@ -110,7 +166,7 @@ const OtpPage = () => {
                 <form onSubmit={handleVerifyOTP} className='space-y-6'>
                   <div className='text-center'>
                     <p className='text-gray-400 text-sm mb-1'>Code sent to</p>
-                    <p className='text-red-400 font-medium break-all text-sm'>{email}</p>
+                    <p className='text-red-400 font-medium break-all text-sm'>{email || '…'}</p>
                   </div>
 
                   <div className='grid grid-cols-6 gap-1.5 sm:gap-2'>
@@ -121,6 +177,7 @@ const OtpPage = () => {
                           inputRefs.current[index] = el
                         }}
                         type='text'
+                        inputMode='numeric'
                         maxLength={1}
                         value={digit}
                         onChange={(e) => handleChange(index, e.target.value)}
@@ -132,6 +189,19 @@ const OtpPage = () => {
                       />
                     ))}
                   </div>
+
+                  {error && (
+                    <p className='text-sm text-red-400 flex items-center justify-center gap-2'>
+                      <i className='bi bi-exclamation-circle' />
+                      {error}
+                    </p>
+                  )}
+                  {info && (
+                    <p className='text-sm text-green-400 flex items-center justify-center gap-2'>
+                      <i className='bi bi-check-circle' />
+                      {info}
+                    </p>
+                  )}
 
                   <button
                     type='submit'
@@ -182,20 +252,11 @@ const OtpPage = () => {
               </div>
 
               <h2 className='text-3xl font-bold text-white mb-3'>Welcome Verified!</h2>
-              <p className='text-gray-400 text-base mb-6'>Your account has been successfully verified. You now have full access to the system.</p>
+              <p className='text-gray-400 text-base mb-6'>Signing you in and taking you to the dashboard…</p>
 
-              <div className='bg-gray-900/40 border border-gray-700/30 rounded-lg p-4 mb-8 text-left'>
-                <p className='text-gray-300 text-sm'><span className='font-semibold'>You&apos;re all set!</span> Explore projects, architectures, and connect directly with Dev_Caroline.</p>
+              <div className='flex justify-center'>
+                <div className='w-6 h-6 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin' />
               </div>
-
-              <button
-                onClick={() => window.location.href = '/'}
-                className='w-full px-4 py-3 bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-red-500/25'
-              >
-                Go to Dashboard
-              </button>
-
-              <p className='text-gray-500 text-xs mt-6'>Thanks for joining the system 🚀</p>
             </div>
           </>
         )}
@@ -203,5 +264,19 @@ const OtpPage = () => {
     </div>
   )
 }
+
+// Minimal background shown while the client reads the query string (also the
+// prerender fallback required for useSearchParams).
+const OtpFallback = () => (
+  <div className='min-h-screen w-full flex items-center justify-center bg-black'>
+    <div className='w-6 h-6 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin' />
+  </div>
+)
+
+const OtpPage = () => (
+  <Suspense fallback={<OtpFallback />}>
+    <OtpForm />
+  </Suspense>
+)
 
 export default OtpPage

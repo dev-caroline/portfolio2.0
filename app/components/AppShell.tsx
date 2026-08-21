@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import Sidenav from './Sidenav'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import { AuthProvider } from './AuthProvider'
 
 // Pages that don't use the main layout (authentication pages)
 const AUTH_PAGES = ['/signup', '/otp']
@@ -24,21 +25,23 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   // Main pages - with sidebar, navbar, and footer
   return (
-    <div className='flex h-screen'>
-      {/* Sidebar Navigation */}
-      <Sidenav isOpen={isSidenavOpen} toggle={toggleSidenav} />
+    <AuthProvider>
+      <div className='flex h-screen'>
+        {/* Sidebar Navigation */}
+        <Sidenav isOpen={isSidenavOpen} toggle={toggleSidenav} />
 
-      {/* Main Content Area */}
-      <div className='flex-1 flex flex-col overflow-hidden'>
-        {/* Top Navigation Bar */}
-        <Navbar toggleSidenav={toggleSidenav} />
+        {/* Main Content Area */}
+        <div className='flex-1 flex flex-col overflow-hidden'>
+          {/* Top Navigation Bar */}
+          <Navbar toggleSidenav={toggleSidenav} />
 
-        {/* Page Content */}
-        <main className='flex-1 overflow-y-auto p-2'>{children}</main>
+          {/* Page Content */}
+          <main className='flex-1 overflow-y-auto p-2'>{children}</main>
 
-        {/* Footer */}
-        <Footer />
+          {/* Footer */}
+          <Footer />
+        </div>
       </div>
-    </div>
+    </AuthProvider>
   )
 }

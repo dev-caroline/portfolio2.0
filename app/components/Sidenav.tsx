@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import { useAuth } from './AuthProvider'
 
 // Navigation menu items
 const MENU_ITEMS = [
@@ -47,24 +48,30 @@ const SocialIcons = () => (
 )
 
 // Status info component
-const StatusInfo = () => (
-  <div className='border border-red-500/20 mt-10 rounded-2xl pt-5 p-3'>
-    <div className='flex gap-2'>
-      <p className='font-mono text-gray-400'>Authentication -</p>
-      <p className='font-serif text-green-600 underline'>Verified</p>
-    </div>
+const StatusInfo = () => {
+  const { isVerified, uptime } = useAuth()
 
-    <div className='flex gap-2 mt-3'>
-      <p className='font-mono text-gray-400'>System Status -</p>
-      <p className='font-serif text-red-700 underline'>Online</p>
-    </div>
+  return (
+    <div className='border border-red-500/20 mt-10 rounded-2xl pt-5 p-3'>
+      <div className='flex gap-2'>
+        <p className='font-mono text-gray-400'>Authentication -</p>
+        <p className={`font-serif underline ${isVerified ? 'text-green-600' : 'text-gray-500'}`}>
+          {isVerified ? 'Verified' : 'Guest'}
+        </p>
+      </div>
 
-    <div className='flex gap-2 mt-3'>
-      <p className='font-mono text-gray-400'>Uptime -</p>
-      <p className='font-serif text-red-700 underline'>2 hours</p>
+      <div className='flex gap-2 mt-3'>
+        <p className='font-mono text-gray-400'>System Status -</p>
+        <p className='font-serif text-red-700 underline'>Online</p>
+      </div>
+
+      <div className='flex gap-2 mt-3'>
+        <p className='font-mono text-gray-400'>Uptime -</p>
+        <p className='font-serif text-red-700 underline'>{uptime}</p>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 // Navigation menu component
 const NavMenu = ({ pathname }: { pathname: string }) => {
