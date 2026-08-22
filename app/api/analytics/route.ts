@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/app/lib/prisma'
 
+type PageViewsByPathRow = {
+  path: string
+  _count: {
+    path: number
+  }
+}
+
 export async function GET() {
   try {
     // Get page views for today
@@ -33,7 +40,7 @@ export async function GET() {
     return NextResponse.json({
       today: pageViewsToday,
       total: totalPageViews,
-      topPages: viewsByPath.map((item) => ({
+      topPages: viewsByPath.map((item: PageViewsByPathRow) => ({
         path: item.path,
         count: item._count.path,
       })),
