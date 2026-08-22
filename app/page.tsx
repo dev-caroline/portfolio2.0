@@ -3,9 +3,20 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { TECH_STACK, PROJECTS, LOGS } from './home/constants'
+import { TECH_STACK, PROJECTS } from './home/constants'
 
-function Card({ value, title, sub, icon, trend }: { value: string | number; title: string; sub: string; icon?: string; trend?: number }) {
+type Metrics = {
+  projectsShipped: number
+  systemsRunning: number
+  publicRepos: number | null
+  streak: number | null
+  commits: number | null
+  uptimePercent: number | null
+}
+
+type LogItem = { time: string; action: string; status: string }
+
+function Card({ value, title, sub, icon }: { value: string | number; title: string; sub: string; icon?: string }) {
   return (
     <div className='group relative border border-red-500/20 rounded-lg p-4 bg-black hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 overflow-hidden'>
       <div className='absolute inset-0 bg-linear-to-r from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:via-red-500/10 group-hover:to-red-500/5 transition-all duration-300' />
@@ -14,11 +25,6 @@ function Card({ value, title, sub, icon, trend }: { value: string | number; titl
           <div>
             <p className='text-xs text-gray-500 mb-2 tracking-widest'>{icon}</p>
             <h1 className='text-3xl font-bold text-red-400 mb-1'>{value}</h1>
-            {trend !== undefined && (
-              <p className={`text-xs font-mono ${trend > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {trend > 0 ? '↗' : '↘'} {Math.abs(trend)}% today
-              </p>
-            )}
           </div>
           <div className='h-8 w-8 rounded-full bg-red-500/10 flex items-center justify-center animate-pulse'>
             <div className='h-2 w-2 rounded-full bg-red-400' />
@@ -31,27 +37,14 @@ function Card({ value, title, sub, icon, trend }: { value: string | number; titl
   )
 }
 
-
-
+// Display helper: real value, or an em-dash while loading / when unavailable.
+const show = (v: number | null | undefined) => (v == null ? '—' : v)
 
 export default function LiveMetrics() {
   const pathname = usePathname()
-  const [stats, setStats] = useState({
-    projects: 8,
-    systems: 2,
-    builds: 47,
-    streak: 14,
-    commits: 156,
-    uptime: 99.8,
-  })
-
-  const [trends, setTrends] = useState({
-    builds: 12,
-    commits: 8,
-    uptime: 2,
-  })
-
-  const [logs, setLogs] = useState(LOGS)
+  const [metrics, setMetrics] = useState<Metrics | null>(null)
+  const [logs, setLogs] = useState<LogItem[]>([])
+  const [logsLoaded, setLogsLoaded] = useState(false)
   const [pageViews, setPageViews] = useState(0)
 
   useEffect(() => {
@@ -59,7 +52,7 @@ export default function LiveMetrics() {
       try {
         const sessionId = localStorage.getItem('sessionId') || Math.random().toString(36)
         localStorage.setItem('sessionId', sessionId)
-        
+
         await fetch('/api/track', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -91,13 +84,32 @@ export default function LiveMetrics() {
   }, [])
 
   useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch('/api/dev-metrics')
+        const data = await response.json()
+        setMetrics(data)
+      } catch (error) {
+        console.error('Failed to fetch dev metrics:', error)
+      }
+    }
+
+    fetchMetrics()
+    const metricsInterval = setInterval(fetchMetrics, 60000)
+
+    return () => clearInterval(metricsInterval)
+  }, [])
+
+  useEffect(() => {
     const fetchGitHubActivity = async () => {
       try {
         const response = await fetch('/api/github-activity')
         const data = await response.json()
-        setLogs(data)
+        if (Array.isArray(data)) setLogs(data)
       } catch (error) {
         console.error('Failed to fetch GitHub activity:', error)
+      } finally {
+        setLogsLoaded(true)
       }
     }
 
@@ -105,25 +117,6 @@ export default function LiveMetrics() {
     const gitHubInterval = setInterval(fetchGitHubActivity, 300000)
 
     return () => clearInterval(gitHubInterval)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStats(prev => ({
-        ...prev,
-        builds: prev.builds + Math.floor(Math.random() * 3),
-        commits: prev.commits + Math.floor(Math.random() * 2),
-        uptime: Math.min(100, prev.uptime + (Math.random() * 0.2)),
-      }))
-      
-      setTrends(prev => ({
-        ...prev,
-        builds: Math.max(0, prev.builds + (Math.random() - 0.5) * 4),
-        commits: Math.max(0, prev.commits + (Math.random() - 0.5) * 3),
-      }))
-    }, 4000)
-
-    return () => clearInterval(interval)
   }, [])
 
   return (
@@ -182,13 +175,14 @@ export default function LiveMetrics() {
             <span className='text-xs text-green-400 font-mono'>ACTIVE</span>
           </div>
         </div>
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3'>
-          <Card value={stats.projects} title="Projects" sub="Shipped" />
-          <Card value={stats.systems} title="Systems" sub="Running" />
-          <Card value={stats.builds} title="Builds" sub="Iterations" trend={Math.round(trends.builds)} />
+        <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3'>
+          <Card value={show(metrics?.projectsShipped)} title="Projects" sub="Shipped" />
+          <Card value={show(metrics?.systemsRunning)} title="Systems" sub="Running" />
+          <Card value={show(metrics?.publicRepos)} title="Repos" sub="Public" />
+          <Card value={show(metrics?.streak)} title="Streak" sub="Days" />
+          <Card value={show(metrics?.commits)} title="Commits" sub="Last 12 mo" />
           <Card value={pageViews} title="Page Views" sub="Today" />
-          <Card value={stats.commits} title="Commits" sub="Pushed" trend={Math.round(trends.commits)} />
-          <Card value={`${stats.uptime.toFixed(1)}%`} title="Uptime" sub="Systems" trend={Math.round(trends.uptime)} />
+          <Card value={metrics?.uptimePercent != null ? `${metrics.uptimePercent.toFixed(1)}%` : '—'} title="Uptime" sub="30 days" />
         </div>
       </div>
 
@@ -231,18 +225,24 @@ export default function LiveMetrics() {
         <div className="col-span-12 lg:col-span-5 relative border border-red-500/10 rounded-xl overflow-hidden lg:min-h-0">
           <h1 className="p-3 text-lg border-b border-red-500/10 bg-black/40">GitHub Activity</h1>
           <div className="h-[calc(100%-48px)] overflow-y-auto no-scrollbar px-3 py-2 space-y-3">
-            {logs.map((log, i) => (
-              <div key={i} className="flex items-start gap-3 text-sm border-b border-red-500/10 pb-2">
-                <span className={`w-2 h-2 mt-2 rounded-full animate-pulse ${log.status === "SUCCESS" ? "bg-green-500" : "bg-yellow-500"}`} />
-                <div className="flex-1">
-                  <p className="text-gray-300">{log.action}</p>
-                  <span className="text-xs text-gray-500">{log.time}</span>
+            {!logsLoaded ? (
+              <p className="text-gray-500 text-sm px-1 py-2">Loading recent activity…</p>
+            ) : logs.length === 0 ? (
+              <p className="text-gray-500 text-sm px-1 py-2">No recent public activity.</p>
+            ) : (
+              logs.map((log, i) => (
+                <div key={i} className="flex items-start gap-3 text-sm border-b border-red-500/10 pb-2">
+                  <span className={`w-2 h-2 mt-2 rounded-full animate-pulse ${log.status === "SUCCESS" ? "bg-green-500" : "bg-yellow-500"}`} />
+                  <div className="flex-1">
+                    <p className="text-gray-300">{log.action}</p>
+                    <span className="text-xs text-gray-500">{log.time}</span>
+                  </div>
+                  <span className={`text-[10px] px-2 py-1 rounded ${log.status === "SUCCESS" ? "bg-green-500/20 text-green-400" : log.status === "ERROR" ? "bg-red-500/20 text-red-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                    {log.status}
+                  </span>
                 </div>
-                <span className={`text-[10px] px-2 py-1 rounded ${log.status === "SUCCESS" ? "bg-green-500/20 text-green-400" : log.status === "ERROR" ? "bg-red-500/20 text-red-400" : "bg-yellow-500/20 text-yellow-400"}`}>
-                  {log.status}
-                </span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div className="pointer-events-none absolute top-0 left-0 w-full h-10 bg-linear-to-b from-black to-transparent" />
           <div className="pointer-events-none absolute bottom-0 left-0 w-full h-10 bg-linear-to-t from-black to-transparent" />

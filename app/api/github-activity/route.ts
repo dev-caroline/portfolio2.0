@@ -1,9 +1,24 @@
+type GitHubEvent = {
+  type: string
+  payload: {
+    commits?: unknown[]
+    action?: string
+    ref_type?: string
+  }
+  repo: { name: string }
+  created_at: string
+}
+
 export async function GET() {
   try {
-    const response = await fetch('https://api.github.com/users/dev-caroline/events/public?per_page=15', {
+    const username = process.env.GITHUB_USERNAME || 'dev-caroline';
+    const token = process.env.GITHUB_TOKEN;
+    const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=15`, {
       headers: {
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Portfolio-App',
+        // A token lifts the rate limit from 60/hr (per IP) to 5000/hr.
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       cache: 'no-store',
     });
@@ -33,7 +48,7 @@ export async function GET() {
 
     const logs = events
       .slice(0, 10)
-      .map((event: any) => {
+      .map((event: GitHubEvent) => {
         let action = '';
         let status = 'INFO';
 
@@ -61,7 +76,7 @@ export async function GET() {
             action = `${event.type} in ${event.repo.name}`;
             status = 'INFO';
           }
-        } catch (e) {
+        } catch {
           action = `Activity in ${event.repo?.name || 'repository'}`;
           status = 'INFO';
         }

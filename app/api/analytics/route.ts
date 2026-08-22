@@ -21,7 +21,7 @@ export async function GET() {
     // Get page views by path (top 5)
     const viewsByPath = await prisma.pageView.groupBy({
       by: ['path'],
-      _count: true,
+      _count: { path: true },
       orderBy: {
         _count: {
           path: 'desc',
@@ -35,7 +35,7 @@ export async function GET() {
       total: totalPageViews,
       topPages: viewsByPath.map((item) => ({
         path: item.path,
-        count: item._count,
+        count: item._count.path,
       })),
     })
   } catch (error) {
